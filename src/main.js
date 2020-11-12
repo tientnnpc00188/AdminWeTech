@@ -20,10 +20,14 @@ import App from './App.vue'
 import router from './router'
 import './registerServiceWorker'
 import ArgonDashboard from './plugins/argon-dashboard'
+import 'bootstrap/dist/js/bootstrap.bundle.js'
+import { ToggleButton } from 'vue-js-toggle-button'
+ 
+Vue.component('ToggleButton', ToggleButton)
 
+export const server='http://localhost:8000/api'
 
 Vue.config.productionTip = false
-
 Vue.use(ArgonDashboard)
 new Vue({
   router,

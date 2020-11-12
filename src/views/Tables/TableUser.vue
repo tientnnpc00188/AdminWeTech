@@ -71,7 +71,7 @@
                       </table>
                     </div>
                   </div>
-                  <!-- <div id="blocked" class="container tab-pane fade">
+                  <div id="blocked" class="container tab-pane fade">
                     <br />
                     <div class="table-responsive">
                       <table class="table align-items-center table-flush">
@@ -127,7 +127,7 @@
                         </tbody>
                       </table>
                     </div>
-                  </div> -->
+                  </div>
                 </div>
                 <div class="card-footer py-4">
                   <nav aria-label="...">
@@ -171,6 +171,8 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
+import {server} from './../../main'
+
 export default {
   data(){
     return{
@@ -189,13 +191,24 @@ export default {
   methods: {
     getData(){
       let this2 = this
-      axios.post('http://localhost:8000/api/user')
+      axios.post(`${server}/user`)
       .then(function (response) {
         this2.userAll = response.data
       })
       .catch(function (error) {
         // handle error
         console.log(error);
+      })
+    },
+    deleteData(rowData) {
+      axios.post(`${server}/delete-shop`,{
+        id:rowData.id
+      })
+      .then(response => {
+        if(response.data.success){
+          this.getData()
+        }
+       
       })
     }
   }

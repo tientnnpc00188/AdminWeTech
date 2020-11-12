@@ -15,22 +15,22 @@
                     <a class="nav-link active" data-toggle="tab" href="#all">Tất cả</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#packaged">Đã đóng gói</a>
+                    <a class="nav-link" data-toggle="tab" href="#unactive">Chờ duyệt</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#passedForShipper">Đã giao cho Shipper</a>
+                    <a class="nav-link" data-toggle="tab" href="#active">Đã duyệt</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#shipping">Đang giao</a>
+                    <a class="nav-link" data-toggle="tab" href="#update">Đã đóng gói</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#shipped">Đã giao</a>
+                    <a class="nav-link" data-toggle="tab" href="#confirm">Đang giao</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#cancelled">Đã hủy</a>
+                    <a class="nav-link" data-toggle="tab" href="#finish">Đã giao</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#return">Trả hàng / Hoàn tiền</a>
+                    <a class="nav-link" data-toggle="tab" href="#cancel">Đã hủy</a>
                   </li>
                 </ul>
 
@@ -40,10 +40,11 @@
                     <br/>
                     <div class="table-responsive">
                       <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{rowData.length}}</a> Đơn Hàng</h5>
-                      <table id="shop" class="table align-items-center table-flush">
+                      <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                           <tr>
                             <th scope="col" class="sort" data-sort="name">ID</th>
+                            <th scope="col" class="sort" data-sort="name">Trạng thái</th>
                             <th scope="col" class="sort" data-sort="budget">ID người dùng</th>
                             <th scope="col" class="sort" data-sort="budget">ID Shipper</th>
                             <th scope="col" class="sort" data-sort="budget">Địa chỉ</th>
@@ -56,7 +57,8 @@
                         <tbody class="list" v-for="(rowData, index) in rowData" v-bind:key="index">
                           <tr>
                             <td>{{rowData.id}}</td>
-                            <td>{{rowData.user_id}}</td>
+                            <td>{{rowData.status}}</td>
+                            <td class="label_title">{{rowData.user_id}}</td>
                             <td>{{rowData.shipper_id}}</td>
                             <td>{{rowData.address}}</td>
                             <td>{{rowData.shipping}}</td>
@@ -81,63 +83,276 @@
                       </table>
                     </div>
                   </div>
-                  <!-- <div id="blocked" class="container tab-pane fade">
+                  <div id="unactive" class="container tab-pane fade">
                     <br />
                     <div class="table-responsive">
+                      <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{unactive.length}}</a> Đơn Hàng</h5>
                       <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                           <tr>
-                            <th scope="col" class="sort" data-sort="name">Mã cửa hàng</th>
-                            <th scope="col" class="sort" data-sort="name">Tên cửa hàng</th>
-                            <th scope="col" class="sort" data-sort="budget">Số điện thoại</th>
-                            <th scope="col" class="sort" data-sort="status">Mail</th>
+                            <th scope="col" class="sort" data-sort="name">ID</th>
+                            <th scope="col" class="sort" data-sort="budget">ID người dùng</th>
+                            <th scope="col" class="sort" data-sort="budget">ID Shipper</th>
+                            <th scope="col" class="sort" data-sort="budget">Địa chỉ</th>
+                            <th scope="col" class="sort" data-sort="budget">Phí vận chuyển</th>
+                            <th scope="col" class="sort" data-sort="budget">Tổng tiền</th>
+                            <th scope="col" class="sort" data-sort="budget">Chi tiết đơn hàng</th>
                             <th scope="col">Thao tác</th>
                           </tr>
                         </thead>
-                        <tbody class="list" v-for="(blocked, index) in blocked" v-bind:key="index">
+                        <tbody class="list" v-for="(unactive, listPackaged) in unactive" v-bind:key="listPackaged">
                           <tr>
-                            <td>{{blocked.idStore}}</td>
-                            <th scope="row">
-                              <div class="media align-items-center">
-                                <a href="#" class="avatar rounded-circle mr-3">
-                                  <img
-                                    alt="Image placeholder"
-                                    v-bind:src="blocked.avatarStore"
-                                  />
-                                </a>
-                                <div class="media-body">
-                                  <span class="name mb-0 text-sm">{{blocked.nameStore}}</span>
-                                </div>
-                              </div>
-                            </th>
-                            <td>{{blocked.phoneStore}}</td>
-                            <td>
-                              {{blocked.mailStore}}
-                            </td>
+                            <td>{{unactive.id}}</td>
+                            <td class="label_title">{{unactive.user_id}}</td>
+                            <td>{{unactive.shipper_id}}</td>
+                            <td>{{unactive.address}}</td>
+                            <td>{{unactive.shipping}}</td>
+                            <td>{{unactive.total}}</td>
+                            <td>{{unactive.order_detail}}</td>
                             <td class="text-right">
-                              <div class="dropdown">
-                                <a
-                                  class="btn btn-sm btn-icon-only text-light"
-                                  href="#"
-                                  role="button"
-                                  data-toggle="dropdown"
-                                  aria-haspopup="true"
-                                  aria-expanded="false"
-                                >
+                              <base-dropdown class="dropdown"
+                                            position="right">
+                                <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                   <i class="fas fa-ellipsis-v"></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                  <a class="dropdown-item" href="javascript:void(0)">Chi tiết cửa hàng</a>
-                                  <a class="dropdown-item" href="javascript:void(0)">Duyệt cửa hàng</a>
-                                  <a class="dropdown-item" href="javascript:void(0)">Xóa cửa hàng</a>
-                                </div>
-                              </div>
+
+                                <template>
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </template>
+                              </base-dropdown>
                             </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
-                  </div> -->
+                  </div>
+                  <div id="active" class="container tab-pane fade">
+                    <br />
+                    <div class="table-responsive">
+                      <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{rowActive.length}}</a> Đơn Hàng</h5>
+                      <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col" class="sort" data-sort="name">ID</th>
+                            <th scope="col" class="sort" data-sort="budget">ID người dùng</th>
+                            <th scope="col" class="sort" data-sort="budget">ID Shipper</th>
+                            <th scope="col" class="sort" data-sort="budget">Địa chỉ</th>
+                            <th scope="col" class="sort" data-sort="budget">Phí vận chuyển</th>
+                            <th scope="col" class="sort" data-sort="budget">Tổng tiền</th>
+                            <th scope="col" class="sort" data-sort="budget">Chi tiết đơn hàng</th>
+                            <th scope="col">Thao tác</th>
+                          </tr>
+                        </thead>
+                        <tbody class="list" v-for="(rowActive, index) in rowActive" v-bind:key="index">
+                          <tr>
+                            <td>{{rowActive.id}}</td>
+                            <td class="label_title">{{rowActive.user_id}}</td>
+                            <td>{{rowActive.shipper_id}}</td>
+                            <td>{{rowActive.address}}</td>
+                            <td>{{rowActive.shipping}}</td>
+                            <td>{{rowActive.total}}</td>
+                            <td>{{rowActive.order_detail}}</td>
+                            <td class="text-right">
+                              <base-dropdown class="dropdown"
+                                            position="right">
+                                <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v"></i>
+                                </a>
+
+                                <template>
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </template>
+                              </base-dropdown>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div id="update" class="container tab-pane fade">
+                    <br />
+                    <div class="table-responsive">
+                      <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{rowUpdate.length}}</a> Đơn Hàng</h5>
+                      <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col" class="sort" data-sort="name">ID</th>
+                            <th scope="col" class="sort" data-sort="budget">ID người dùng</th>
+                            <th scope="col" class="sort" data-sort="budget">ID Shipper</th>
+                            <th scope="col" class="sort" data-sort="budget">Địa chỉ</th>
+                            <th scope="col" class="sort" data-sort="budget">Phí vận chuyển</th>
+                            <th scope="col" class="sort" data-sort="budget">Tổng tiền</th>
+                            <th scope="col" class="sort" data-sort="budget">Chi tiết đơn hàng</th>
+                            <th scope="col">Thao tác</th>
+                          </tr>
+                        </thead>
+                        <tbody class="list" v-for="(rowUpdate, index) in rowUpdate" v-bind:key="index">
+                          <tr>
+                            <td>{{rowUpdate.id}}</td>
+                            <td class="label_title">{{rowUpdate.user_id}}</td>
+                            <td>{{rowUpdate.shipper_id}}</td>
+                            <td>{{rowUpdate.address}}</td>
+                            <td>{{rowUpdate.shipping}}</td>
+                            <td>{{rowUpdate.total}}</td>
+                            <td>{{rowUpdate.order_detail}}</td>
+                            <td class="text-right">
+                              <base-dropdown class="dropdown"
+                                            position="right">
+                                <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v"></i>
+                                </a>
+
+                                <template>
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </template>
+                              </base-dropdown>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div id="confirm" class="container tab-pane fade">
+                    <br />
+                    <div class="table-responsive">
+                      <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{rowConfirm.length}}</a> Đơn Hàng</h5>
+                      <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col" class="sort" data-sort="name">ID</th>
+                            <th scope="col" class="sort" data-sort="budget">ID người dùng</th>
+                            <th scope="col" class="sort" data-sort="budget">ID Shipper</th>
+                            <th scope="col" class="sort" data-sort="budget">Địa chỉ</th>
+                            <th scope="col" class="sort" data-sort="budget">Phí vận chuyển</th>
+                            <th scope="col" class="sort" data-sort="budget">Tổng tiền</th>
+                            <th scope="col" class="sort" data-sort="budget">Chi tiết đơn hàng</th>
+                            <th scope="col">Thao tác</th>
+                          </tr>
+                        </thead>
+                        <tbody class="list" v-for="(rowConfirm, index) in rowConfirm" v-bind:key="index">
+                          <tr>
+                            <td>{{rowConfirm.id}}</td>
+                            <td class="label_title">{{rowConfirm.user_id}}</td>
+                            <td>{{rowConfirm.shipper_id}}</td>
+                            <td>{{rowConfirm.address}}</td>
+                            <td>{{rowConfirm.shipping}}</td>
+                            <td>{{rowConfirm.total}}</td>
+                            <td>{{rowConfirm.order_detail}}</td>
+                            <td class="text-right">
+                              <base-dropdown class="dropdown"
+                                            position="right">
+                                <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v"></i>
+                                </a>
+
+                                <template>
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </template>
+                              </base-dropdown>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div id="finish" class="container tab-pane fade">
+                    <br />
+                    <div class="table-responsive">
+                      <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{rowFinish.length}}</a> Đơn Hàng</h5>
+                      <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col" class="sort" data-sort="name">ID</th>
+                            <th scope="col" class="sort" data-sort="budget">ID người dùng</th>
+                            <th scope="col" class="sort" data-sort="budget">ID Shipper</th>
+                            <th scope="col" class="sort" data-sort="budget">Địa chỉ</th>
+                            <th scope="col" class="sort" data-sort="budget">Phí vận chuyển</th>
+                            <th scope="col" class="sort" data-sort="budget">Tổng tiền</th>
+                            <th scope="col" class="sort" data-sort="budget">Chi tiết đơn hàng</th>
+                            <th scope="col">Thao tác</th>
+                          </tr>
+                        </thead>
+                        <tbody class="list" v-for="(rowFinish, index) in rowFinish" v-bind:key="index">
+                          <tr>
+                            <td>{{rowFinish.id}}</td>
+                            <td class="label_title">{{rowFinish.user_id}}</td>
+                            <td>{{rowFinish.shipper_id}}</td>
+                            <td>{{rowFinish.address}}</td>
+                            <td>{{rowFinish.shipping}}</td>
+                            <td>{{rowFinish.total}}</td>
+                            <td>{{rowFinish.order_detail}}</td>
+                            <td class="text-right">
+                              <base-dropdown class="dropdown"
+                                            position="right">
+                                <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v"></i>
+                                </a>
+
+                                <template>
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </template>
+                              </base-dropdown>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div id="cancel" class="container tab-pane fade">
+                    <br />
+                    <div class="table-responsive">
+                      <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{rowCancel.length}}</a> Đơn Hàng</h5>
+                      <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col" class="sort" data-sort="name">ID</th>
+                            <th scope="col" class="sort" data-sort="budget">ID người dùng</th>
+                            <th scope="col" class="sort" data-sort="budget">ID Shipper</th>
+                            <th scope="col" class="sort" data-sort="budget">Địa chỉ</th>
+                            <th scope="col" class="sort" data-sort="budget">Phí vận chuyển</th>
+                            <th scope="col" class="sort" data-sort="budget">Tổng tiền</th>
+                            <th scope="col" class="sort" data-sort="budget">Chi tiết đơn hàng</th>
+                            <th scope="col">Thao tác</th>
+                          </tr>
+                        </thead>
+                        <tbody class="list" v-for="(rowCancel, index) in rowCancel" v-bind:key="index">
+                          <tr>
+                            <td>{{rowCancel.id}}</td>
+                            <td class="label_title">{{rowCancel.user_id}}</td>
+                            <td>{{rowCancel.shipper_id}}</td>
+                            <td>{{rowCancel.address}}</td>
+                            <td>{{rowCancel.shipping}}</td>
+                            <td>{{rowCancel.total}}</td>
+                            <td>{{rowCancel.order_detail}}</td>
+                            <td class="text-right">
+                              <base-dropdown class="dropdown"
+                                            position="right">
+                                <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v"></i>
+                                </a>
+
+                                <template>
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </template>
+                              </base-dropdown>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
                 <div class="card-footer py-4">
                   <nav aria-label="...">
@@ -180,26 +395,36 @@
 
 <script>
 import axios from 'axios'
-import $ from 'jquery'
+// import $ from 'jquery'
+import {server} from './../../main'
+
 export default {
   data(){
     return{
-      rowData: [
-        
-      ],
-      blocked: [
-        
-      ]
+      rowData: [],
+      unactive: [],
+      rowActive: [],
+      rowupdate: [],
+      rowConfirm: {},
+      rowFinish: [],
+      rowCancel: [],
     }
   },
   created(){
     this.getData()
-    $('#order').DataTable();
+    this.getUnAct()
+    this.getActive()
+    this.getUpdate()
+    this.getConfirm()
+    this.getFinish()
+    this.getCancel()
+    // this.divide()
+    // $('#order').DataTable();
   },
   methods: {
     getData(){
       let this2 = this
-      axios.post('http://localhost:8000/api/order')
+      axios.post(`${server}/order`)
       .then(function (response) {
         this2.rowData = response.data
       })
@@ -207,26 +432,80 @@ export default {
         // handle error
         console.log(error);
       })
-    }
-  },
-  computed: {
-    listPackaged() {
-      return this.rowData.filter((item) => item.status == "Đã đóng gói");
     },
-    listPassedForShipper() {
-      return this.rowData.filter(
-        (item) => item.status == "Đã giao cho Shipper"
-      );
+
+    getUnAct() {
+      let this2 = this
+      axios.post(`${server}/unactive-order-admin`)
+      .then(function (response) {
+        this2.unactive = response.data
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
     },
-    listShipping() {
-      return this.rowData.filter((item) => item.status == "Đang giao");
+
+    getActive() {
+      let this2 = this
+      axios.post(`${server}/active-order-admin`)
+      .then(function (response) {
+        this2.rowActive = response.data
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
     },
-    listShipped() {
-      return this.rowData.filter((item) => item.status == "Đã giao");
+
+    getUpdate() {
+      let this2 = this
+      axios.post(`${server}/update-order-admin`)
+      .then(function (response) {
+        this2.rowUpdate = response.data
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
     },
-    listCancelled() {
-      return this.rowData.filter((item) => item.status == "Đã hủy");
+
+    getConfirm() {
+      let this2 = this
+      axios.post(`${server}/confirm-order-admin`)
+      .then(function (response) {
+        this2.rowConfirm = response.data
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
     },
+
+    getFinish() {
+      let this2 = this
+      axios.post(`${server}/finish-order-admin`)
+      .then(function (response) {
+        this2.rowFinish = response.data
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+    },
+
+    getCancel() {
+      let this2 = this
+      axios.post(`${server}/cancel-order-admin`)
+      .then(function (response) {
+        this2.rowCancel = response.data
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+    },
+
   },
 };
 </script>
@@ -248,11 +527,9 @@ export default {
     margin: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 200px;
+    width: 150px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-
   }
 </style>

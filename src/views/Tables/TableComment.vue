@@ -12,102 +12,107 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                   <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#shop">Đang hoạt động</a>
+                    <a class="nav-link active" data-toggle="tab" href="#active">Đã duyệt</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#unactive">Chờ duyệt</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#blocked">Đã chặn</a>
+                    <a class="nav-link" data-toggle="tab" href="#waiting">Chờ duyệt</a>
                   </li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                  <div id="shop" class="container tab-pane active">
+                  <div id="active" class="container tab-pane active">
                     <br/>
                     <div class="table-responsive">
-                      <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{rowData.length}}</a> Cửa Hàng</h5>
+                      <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{rowData.length}}</a> Bình Luận</h5>
                       <table id="shop" class="table align-items-center table-flush">
                         <thead class="thead-light">
                           <tr>
                             <th scope="col" class="sort" data-sort="name">ID</th>
-                            <th scope="col" class="sort" data-sort="name">Tên cửa hàng</th>
-                            <th scope="col" class="sort" data-sort="name">Tên người dùng</th>
-                            <th scope="col" class="sort" data-sort="budget">Ảnh đại diện</th>
-                            <th scope="col" class="sort" data-sort="budget">CMND</th>
-                            <th scope="col" class="sort" data-sort="budget">Số điện thoại</th>
-                            <th scope="col" class="sort" data-sort="budget">Email</th>
-                            <th scope="col" class="sort" data-sort="budget">Địa chỉ</th>
+                            <th scope="col" class="sort" data-sort="budget">ID người dùng</th>
+                            <th scope="col" class="sort" data-sort="budget">ID sản phẩm</th>
+                            <th scope="col" class="sort" data-sort="budget">Bình luận</th>
+                            <th scope="col" class="sort" data-sort="budget">Đánh giá</th>
                             <th scope="col">Thao tác</th>
                           </tr>
                         </thead>
                         <tbody class="list" v-for="(rowData, index) in rowData" v-bind:key="index">
                           <tr>
-                            <td>{{rowData.shop_id}}</td>
-                            <td>{{rowData.shop_name}}</td>
-                            <td>{{rowData.name}}</td>
-                            <th scope="row">
-                              <div class="media align-items-center">
-                                <a href="#" class="avatar rounded-circle mr-3">
-                                  <img
-                                    alt="Chưa có ảnh"
-                                    v-bind:src="rowData.avatar"
-                                  />
+                            <td>{{rowData.id}}</td>
+                            <td class="text">{{rowData.user_id}}</td>
+                            <td>{{rowData.product_id}}</td>
+                            <td>{{rowData.content}}</td>
+                            <td>{{rowData.rating}}</td>
+                            <td class="text-right">
+                              <base-dropdown class="dropdown"
+                                            position="right">
+                                <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v"></i>
                                 </a>
-                              </div>
-                            </th>
-                            <td>{{rowData.identity_card}}</td>
-                            <td>{{rowData.phone_number}}</td>
-                            <td>{{rowData.email}}</td>
-                            <td>{{rowData.address}}</td>
-                            <td>
-                              <button class="btn btn-danger" @click="deleteData(rowData)">Chặn</button>
+
+                                <template>
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </template>
+                              </base-dropdown>
                             </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
-                  <div id="unactive" class="container tab-pane fade">
+                  <div id="waiting" class="container tab-pane fade">
                     <br />
                     <div class="table-responsive">
-                      <h5 class="col-sm-2">Có <a style="color: #ED0000;">{{rowUnActive.length}}</a> Cửa Hàng</h5>
-                      <table id="unactive" class="table align-items-center table-flush">
+                      <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                           <tr>
-                            <th scope="col" class="sort" data-sort="name">ID</th>
+                            <th scope="col" class="sort" data-sort="name">Mã cửa hàng</th>
                             <th scope="col" class="sort" data-sort="name">Tên cửa hàng</th>
-                            <th scope="col" class="sort" data-sort="name">Tên người dùng</th>
-                            <th scope="col" class="sort" data-sort="budget">Ảnh đại diện</th>
-                            <th scope="col" class="sort" data-sort="budget">CMND</th>
                             <th scope="col" class="sort" data-sort="budget">Số điện thoại</th>
-                            <th scope="col" class="sort" data-sort="budget">Email</th>
-                            <th scope="col" class="sort" data-sort="budget">Địa chỉ</th>
-                            <th scope="col" class="sort" data-sort="budget">Thao tác</th>
+                            <th scope="col" class="sort" data-sort="status">Mail</th>
+                            <th scope="col">Thao tác</th>
                           </tr>
                         </thead>
-                        <tbody class="list" v-for="(rowUnActive, index) in rowUnActive" v-bind:key="index">
+                        <tbody class="list" v-for="(blocked, index) in blocked" v-bind:key="index">
                           <tr>
-                            <td>{{rowUnActive.shop_id}}</td>
-                            <td>{{rowUnActive.shop_name}}</td>
-                            <td>{{rowUnActive.name}}</td>
+                            <td>{{blocked.idStore}}</td>
                             <th scope="row">
                               <div class="media align-items-center">
                                 <a href="#" class="avatar rounded-circle mr-3">
                                   <img
-                                    alt="Chưa có ảnh"
-                                    v-bind:src="rowUnActive.avatar"
+                                    alt="Image placeholder"
+                                    v-bind:src="blocked.avatarStore"
                                   />
                                 </a>
+                                <div class="media-body">
+                                  <span class="name mb-0 text-sm">{{blocked.nameStore}}</span>
+                                </div>
                               </div>
                             </th>
-                            <td>{{rowUnActive.identity_card}}</td>
-                            <td>{{rowUnActive.phone_number}}</td>
-                            <td>{{rowUnActive.email}}</td>
-                            <td>{{rowUnActive.address}}</td>
+                            <td>{{blocked.phoneStore}}</td>
                             <td>
-                              <button class="btn btn-danger" @click="deleteData(rowUnActive)">Xóa</button>
+                              {{blocked.mailStore}}
+                            </td>
+                            <td class="text-right">
+                              <div class="dropdown">
+                                <a
+                                  class="btn btn-sm btn-icon-only text-light"
+                                  href="#"
+                                  role="button"
+                                  data-toggle="dropdown"
+                                  aria-haspopup="true"
+                                  aria-expanded="false"
+                                >
+                                  <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                  <a class="dropdown-item" href="javascript:void(0)">Chi tiết cửa hàng</a>
+                                  <a class="dropdown-item" href="javascript:void(0)">Duyệt cửa hàng</a>
+                                  <a class="dropdown-item" href="javascript:void(0)">Xóa cửa hàng</a>
+                                </div>
+                              </div>
                             </td>
                           </tr>
                         </tbody>
@@ -165,21 +170,19 @@ export default {
       rowData: [
         
       ],
-      rowUnActive: [
+      blocked: [
         
       ]
     }
   },
   created(){
-    this.getData();
-    this.getUnAct();
-    $('#shop').DataTable();
-    $('#unactive').DataTable();
+    this.getData()
+    $('#comment').DataTable();
   },
   methods: {
     getData(){
       let this2 = this
-      axios.post(`${server}/get-shop`)
+      axios.post(`${server}/comment`)
       .then(function (response) {
         this2.rowData = response.data
       })
@@ -187,28 +190,7 @@ export default {
         // handle error
         console.log(error);
       })
-    },
-
-    getUnAct(){
-      let this2 = this
-      axios.post(`${server}/unactive-shop`)
-      .then(function (response) {
-        this2.rowUnActive = response.data
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
     }
-    // deleteData(rowData) {
-    //   axios.post(`${server}/delete-shop`,{
-    //     id:rowData.shop_id
-    //   })
-    //   .then(response => {
-    //     console.log(response.data)
-    //   })
-    //   console.log(rowData)
-    // }
   }
 };
 </script>
@@ -224,5 +206,12 @@ export default {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
 
+  }
+  .text {
+    display: block;
+    width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: Ellipsis;
   }
 </style>

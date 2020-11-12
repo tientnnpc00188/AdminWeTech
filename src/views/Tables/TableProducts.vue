@@ -21,9 +21,6 @@
                     <a class="nav-link" data-toggle="tab" href="#Pending">Sản phẩm chờ duyệt</a>
                     <!-- </router-link> -->
                   </li>
-                  <router-link to="/addproduct">
-                    <button class="btn-update">Thêm</button>
-                  </router-link>
                 </ul>
 
                 <!-- Tab panes -->
@@ -66,35 +63,29 @@
                             <td class="text-right">
                               <base-dropdown class="dropdown"
                                             position="right">
-                                <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <i class="fas fa-ellipsis-v"></i>
-                                </a>
-
                                 <template>
                                   <div class="dropdown-item" href="#">
-                                    <base-a block type="primary" class=" mb-3" @click="modals.modal1 = true">
+                                    <base-a block type="primary" class=" mb-3" @click="showdetail(rowData)">
                                         Chi tiết
                                     </base-a>
-                                    <modal :show.sync="modals.modal1">
+                                  </div>
+                                </template>
+                              </base-dropdown>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <modal :show.sync="modals.modal1">
                                       <h4 style="color: #BE0202">Giới thiệu</h4>
-                                      <p style="color: gray">{{rowData.introduction}}</p>
+                                      <p style="color: gray">{{detail.introduction}}</p>
                                       <h4 style="color: #0D05A4">Mô tả</h4>
-                                      <h5 style="color: gray">abc</h5>
+                                      <h5 style="color: gray">{{detail.description}}</h5>
                                       <template slot="footer">
                                         <base-button type="link" class="ml-auto" @click="modals.modal1 = false">Close
                                         </base-button>
                                       </template>
                                     </modal>
-                                  </div>
-                                  <a class="dropdown-item" href="#">Vô hiệu hóa</a>
-                                </template>
-                              </base-dropdown>
-                            </td>
-                            
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
                   <!-- <div id="Pending" class="container tab-pane fade">
                     <br />
@@ -145,6 +136,8 @@
 import axios from 'axios'
 import $ from 'jquery'
 import Modal from "@/components/Modal.vue";
+import {server} from './../../main'
+
 
 export default {
   components: {
@@ -158,6 +151,7 @@ export default {
       blocked: [
         
       ],
+      detail: {},
       modals: {
         modal1: false,
       }
@@ -170,7 +164,7 @@ export default {
   methods: {
     getData(){
       let this2 = this
-      axios.post('http://localhost:8000/api/product')
+      axios.post(`${server}/product`)
       .then(function (response) {
         this2.rowData = response.data
       })
@@ -178,6 +172,10 @@ export default {
         // handle error
         console.log(error);
       })
+    },
+    showdetail(rowData){
+      this.modals.modal1 = true
+      this.detail = rowData
     }
   }
 };

@@ -55,11 +55,11 @@ export default new Router({
           name: 'Quản Lý Sản Phẩm',
           component: () => import(/* webpackChunkName: "demo" */ './views/TableProducts.vue')
         },
-        {
-          path: '/addproduct',
-          name: 'Thêm Sản Phẩm',
-          component: () => import(/* webpackChunkName: "demo" */ './views/AddProduct.vue')
-        },
+        // {
+        //   path: '/addproduct',
+        //   name: 'Thêm Sản Phẩm',
+        //   component: () => import(/* webpackChunkName: "demo" */ './views/AddProduct.vue')
+        // },
         {
           path: '/tablebill',
           name: 'Quản Lý Hóa Đơn',
@@ -76,10 +76,15 @@ export default new Router({
           component: () => import(/* webpackChunkName: "demo" */ './views/TableBanner.vue')
         },
         {
-          path: '/text',
-          name: 'Quản Lý Banner',
-          component: () => import(/* webpackChunkName: "demo" */ './views/text.vue')
+          path: '/tablecomment',
+          name: 'Quản Lý Bình Luận',
+          component: () => import(/* webpackChunkName: "demo" */ './views/TableComment.vue')
         },
+        // {
+        //   path: '/text',
+        //   name: 'Quản Lý Banner',
+        //   component: () => import(/* webpackChunkName: "demo" */ './views/text.vue')
+        // },
       ]
     },
     {

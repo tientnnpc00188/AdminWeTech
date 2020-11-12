@@ -30,30 +30,20 @@
                           <tr>
                             <th scope="col" class="sort" data-sort="name">ID</th>
                             <th scope="col" class="sort" data-sort="budget">Hình ảnh</th>
-                            <th scope="col">Thao tác</th>
+                            <th scope="col" class="sort" data-sort="budget">Trạng thái</th>
+                            <th scope="col" class="sort" data-sort="budget">hành động</th>
                           </tr>
                         </thead>
                         <tbody class="list" v-for="(rowData, index) in rowData" v-bind:key="index">
                           <tr>
                             <td>{{rowData.id}}</td>
                             <td><img
-                                    style="width: 200px"
+                                    style="width: 100px"
                                     v-bind:src="rowData.image"
                                   /></td>
-                            
-                            <td class="text-right">
-                              <base-dropdown class="dropdown"
-                                            position="right">
-                                <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <i class="fas fa-ellipsis-v"></i>
-                                </a>
-
-                                <template>
-                                  <a class="dropdown-item" href="#">Action</a>
-                                  <a class="dropdown-item" href="#">Another action</a>
-                                  <a class="dropdown-item" href="#">Something else here</a>
-                                </template>
-                              </base-dropdown>
+                            <td><toggle-button @change="onChangeEventHandler"/></td>
+                            <td>
+                              <button class="btn btn-danger" @click="deleteData(rowData, index)">Xóa</button>
                             </td>
                           </tr>
                         </tbody>
@@ -95,22 +85,25 @@
                     <div class="form-group">
                       <label class="form-control-label">Upload hình ảnh</label>
                       <div class="input-group mb-3">
-                        <div class="custom-file row">
+                        <div class="row">
                           <input
                             type="file"
-                            class="custom-file-input"
-                            id="addBanner"
-                            value="Thêm"
                             ref="fileInputA"
                             hidden
+                            v-on:change="handleFileUpload()"
                           />
-                          <button type="button" v-on:click="openFile"> vbnm</button>
-                          <button class="btn btn-danger" type="submit">Thêm</button>
+                          <img @click="openFile" class="ml-3" :src="tempImage" width="100" />
+                          
                         </div>
+                        
                       </div>
+                      
                     </div>
+                    
                     <br />
+                    
                   </div>
+                  
                   <!-- <div id="blocked" class="container tab-pane fade">
                     <br />
                     <div class="table-responsive">
@@ -120,7 +113,7 @@
                             <th scope="col" class="sort" data-sort="name">Mã cửa hàng</th>
                             <th scope="col" class="sort" data-sort="name">Tên cửa hàng</th>
                             <th scope="col" class="sort" data-sort="budget">Số điện thoại</th>
-                            <th scope="col" class="sort" data-sort="status">Mail</th>
+<th scope="col" class="sort" data-sort="status">Mail</th>
                             <th scope="col">Thao tác</th>
                           </tr>
                         </thead>
@@ -171,6 +164,7 @@
                 </div>
                 
               </div>
+              
             </div>
           </div>
         </div>
@@ -182,26 +176,30 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
+import {server} from './../../main'
 export default {
   data(){
     return{
       rowData: [
         
       ],
+      
       blocked: [
         
       ],
-      file:null
+      file:null,
+tempImage:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAgVBMVEXw8PABFicAAAD39/cACyD6+fpJUVgAABiLjpHS0tP8/PzOzs8AABXs7e0ADyIAAAacnqAtOUMAABEcKjamp6pYX2UdJTCtsLN8gIQAABvk5eYAAA3Bw8UpND4gLTkyPUZqbnOWmZyGiYx6foMXHywYHyxrcHW4u73a3N1ASFEAECD3KgboAAACYElEQVR4nO3c63KaQBiAYWAxKBVijEbRYAxJc+j9X2DBnhbcTpFhT/Z9fjIfie+M4mGBIAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwxcTuiy6ZsB138hjpM7Md10jLONSlWE9s59XS+1xbYXzjTGFyO77CpcL5KsjGFkwLhwqXq/EPemKaUGgIhUNRaA6FQ1FozjUWirTlUBdu0lHIPRYLxba8kzzVn5Dzw90YyqP0VLBXKKoob2m+BOTj2B//FNkrnNzo+z6YP6SuFMbz8dV/Nr93pTBeL8Z3LBwqTKapGFu6WjpVqOH9j0JjKByKQnMoHIpCcy4rFGnvST8LxXNZ9R31slBsojh67jnrZ+FLUX9K7/coPS3cUijNUmgMhTIKW7MUGkOhjMLWLIXGUCijsDXrcWH678HAk8LztYgfhd3NyoftQ6GoXh86XptVwe7Gr2/KvT0ofI/OFnVD5QJxtFDs7kGhWOx7LvUmWz8Lgyy53Xc0C+J5d+M++lDs7UNhkG261nGYf753t+58fR2eH0z/cixV7+tFYdf/8o5P4c9ZCo2hUEZha5ZCYyiUUdiapdAYCmUUtmY7hRM/CqtlWBwvKfz4faX67MXWNaQXnTG0+xYpf7JQaArDXLpS3dp1wBee19b7rgGnwg4vCntTFc6Vv6zqprUwb99SodyN/m960Hr25aG9xmHnthimzi+1h8KhKDSHwqHcKiwqDfcyWc0dKgwLDXdMSkKXCjVxpHBdaCuMSxcKg5mGZ+gvj7bjTkQ200W5OAwAAAAAAAAAAAAAAAAAAAAAAAAAAADganwH5zd6LobMFeIAAAAASUVORK5CYII="
     }
   },
   created(){
-    this.getData()
+    this.getData();
+    // this.getDelete();
     $('#banner').DataTable();
   },
   methods: {
     getData(){
       let this2 = this
-      axios.post('http://localhost:8000/api/banner')
+      axios.post(`${server}/banner`)
       .then(function (response) {
         this2.rowData = response.data
       })
@@ -212,26 +210,40 @@ export default {
     },
     openFile(){
       this.$refs.fileInputA.click()
-      this.handleFileUpload()
     },
     handleFileUpload() {
-        this.file = this.$refs.fileInputA.files[0];
-        console.log(this.$refs.fileInputA.files[0]);
-        let formData = new FormData();
-        formData.append('file', this.file);
+      this.file = this.$refs.fileInputA.files[0];
+      let formData = new FormData();
+      formData.append('image', this.file);
+      formData.append('status',0)
 
-        // axios.post('http://localhost:3000/file',
-        //   formData,
-        //   {
-        //     headers: {
-        //         'Content-Type': 'multipart/form-data'
-        //     }
-        //   }
-        // ).then(response => {  
-        //     this.propInfo.avatar = response.data.url
-        // })
+      axios.post(`${server}/add-banner`,
+        formData,
+        {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then( async response => {  
+        //goi lai ham insertImage khi da co du lieu tra ve tu server
+        if(response.data.success){
+          this.getData()
+        }
+            
+      })
 
-      },
+    },
+    deleteData(rowData) {
+      axios.post(`${server}/delete-banner`,{
+        id:rowData.id
+      })
+      .then(response => {
+        if(response.data.success){
+          this.getData()
+        }
+       
+      })
+    }
   }
 };
 </script>

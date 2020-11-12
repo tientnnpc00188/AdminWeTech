@@ -9,7 +9,7 @@
         <sidebar-item
           :link="{
             name: 'Trang chủ',
-            icon: 'ni ni-tv-2 text-danger',
+            icon: 'ni ni-tv-2 text-info',
             path: '/dashboard'
           }"
         />
@@ -27,13 +27,14 @@
           <h6 class="navbar-heading text-muted">Gian hàng</h6>
         </div>
         
-        <sidebar-item :link="{name: 'Sản phẩm', icon: 'ni ni-tag text-orange', path: '/tableproducts'}"/>
-        <sidebar-item :link="{name: 'Quản lý hóa đơn', icon: 'ni ni-align-left-2 text-blue', path: '/tablebill'}"/>
-        <sidebar-item :link="{name: 'Quản lý đơn hàng', icon: 'ni ni-cart text-red', path: '/tableorder'}"/>
+        <sidebar-item :link="{name: 'Sản phẩm', icon: 'ni ni-tag text-red', path: '/tableproducts'}"/>
+        <sidebar-item :link="{name: 'Quản lý bình luận', icon: 'ni ni-align-left-2 text-blue', path: '/tablecomment'}"/>
+        <sidebar-item :link="{name: 'Quản lý hóa đơn', icon: 'ni ni-credit-card text-red', path: '/tablebill'}"/>
+        <sidebar-item :link="{name: 'Quản lý đơn hàng', icon: 'ni ni-cart text-blue', path: '/tableorder'}"/>
         
         <hr class="my-2"/>
 
-        <sidebar-item :link="{name: 'Quản lý Banner', icon: 'ni ni-album-2 text-blue', path: '/tablebanner'}"/>
+        <sidebar-item :link="{name: 'Quản lý Banner', icon: 'ni ni-album-2 text-green', path: '/tablebanner'}"/>
 
 
         <!-- <sidebar-item :link="{name: 'Login', icon: 'ni ni-key-25 text-info', path: '/login'}"/>

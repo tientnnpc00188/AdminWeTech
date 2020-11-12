@@ -180,6 +180,8 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
+import {server} from './../../main'
+
 export default {
   data(){
     return{
@@ -198,7 +200,7 @@ export default {
   methods: {
     getData(){
       let this2 = this
-      axios.post('http://localhost:8000/api/detail-shipper')
+      axios.post(`${server}/detail-shipper`)
       .then(function (response) {
         this2.rowData = response.data
       })
